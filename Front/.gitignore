@@ -3,12 +3,5 @@
 .fake
 BuildPackages
 
-# Visual Studio stuff
-.vs
-
-# .Net build stuff
-bin
-obj
-
 # Front stuff
 node_modules
