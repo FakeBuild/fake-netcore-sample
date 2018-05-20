@@ -1,0 +1,18 @@
+# Not sure about that one yet
+build.fsx.lock
+
+# Fake and Other stuff required to run the build
+# Fake stuff
+.fake
+BuildPackages
+
+
+# Visual Studio stuff
+.vs
+
+# .Net build stuff
+bin
+obj
+
+# Front stuff
+node_modules
