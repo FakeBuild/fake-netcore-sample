@@ -2,7 +2,7 @@
 
 namespace Poc.Cli
 {
-    class Program
+    public class Program
     {
         public static int Main(string[] args)
         {

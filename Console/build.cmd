@@ -10,7 +10,7 @@ IF NOT EXIST "%BUILD_PACKAGES%\fake.exe" (
 )
 
 REM comments following lines once you are done with your script, the idea is to be sure paket install regenerate the lock file if we add new nuget in the fsx
-IF EXIST ".fake"          (RMDIR /Q /S ".fake"         )
-IF EXIST "build.fsx.lock" (DEL         "build.fsx.lock")
+REM IF EXIST ".fake"          (RMDIR /Q /S ".fake"         )
+REM IF EXIST "build.fsx.lock" (DEL         "build.fsx.lock")
 
 "%BUILD_PACKAGES%/fake.exe" run build.fsx --target Deploy

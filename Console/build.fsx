@@ -1,4 +1,5 @@
 #r "paket: 
+open Fake.DotNet.Testing.XUnit2
 nuget FSharp.Core prerelease
 nuget Fake.Core.Target prerelease
 nuget Fake.IO.FileSystem prerelease
@@ -17,32 +18,43 @@ open Fake.DotNet.Testing
 Target.create "Clean" (fun _ ->
   Trace.log " --- Cleaning stuff --- "
 
-  let setDotNetOptions defaultDtNetOptions : DotNet.Options =
-    defaultDtNetOptions
-
-  DotNet.exec setDotNetOptions "clean" ""
+  DotNet.exec id "clean" ""
   |> ignore
 )
 
 Target.create "Build" (fun _ ->
   Trace.log " --- Building the app --- "
 
-  let setBuildParams defaultBuildParams = 
-    {defaultBuildParams with }
+  // Using the test project to build both Project and unit tests
+  let setBuildParams (defaultBuildParams :DotNet.BuildOptions) = 
+    { defaultBuildParams with
+        Common = { defaultBuildParams.Common with WorkingDirectory = "test\\Poc.Cli.Tests" }
+    }
 
-  DotNet.build id ""
+  DotNet.build setBuildParams "Poc.Cli.Tests.csproj"
 )
 
 Target.create "Test" (fun _ ->
   Trace.log " --- Testing the app --- "
 
-  !!("test/**/*.Tests.dll")
-  |> XUnit2.run id
+  // let setXUnitParams (defaultXUnitParams :XUnit2.XUnit2Params) = 
+  //   { defaultXUnitParams with
+  //       WorkingDir = Some "test\\Poc.Cli.Tests"
+  //   }
+
+  // !!("test/**/*.Tests.dll")
+  // |> XUnit2.run setXUnitParams
 )
 
 Target.create "Publish" (fun _ ->
   Trace.log " --- Publishing app --- "
-  DotNet.publish id ""
+
+  let setPublishParams (defaultPublishParams :DotNet.PublishOptions) = 
+    { defaultPublishParams with
+        Common = { defaultPublishParams.Common with WorkingDirectory = "src\\Poc.Cli" }
+    }
+
+  DotNet.publish setPublishParams "Poc.Cli.csproj"
 )
 
 Target.create "Deploy" (fun _ ->
