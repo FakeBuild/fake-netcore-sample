@@ -9,10 +9,11 @@ nuget Fake.DotNet.Testing.Xunit2 prerelease
 
 #load "./.fake/build.fsx/intellisense.fsx"
 
+open System.IO
 open Fake.Core
 open Fake.IO.Globbing.Operators
 open Fake.DotNet
-open Fake.DotNet.Testing
+// open Fake.DotNet.Testing
 
 // *** Define Targets ***
 Target.create "Clean" (fun _ ->
@@ -34,16 +35,27 @@ Target.create "Build" (fun _ ->
   DotNet.build setBuildParams "Poc.Cli.Tests.csproj"
 )
 
+// Target.create "Test" (fun _ ->
+//   Trace.log " --- Testing the app --- "
+//   let setXUnitParams (defaultXUnitParams :XUnit2.XUnit2Params) = 
+//     { defaultXUnitParams with
+//         Parallel = XUnit2.ParallelMode.All
+//         WorkingDir = Some "test\\Foo.Tests"
+//     }
+//   XUnit2.run setXUnitParams [||]
+// )
+
 Target.create "Test" (fun _ ->
   Trace.log " --- Testing the app --- "
 
-  // let setXUnitParams (defaultXUnitParams :XUnit2.XUnit2Params) = 
-  //   { defaultXUnitParams with
-  //       WorkingDir = Some "test\\Poc.Cli.Tests"
-  //   }
+  let setDotNetOptions (projectDirectory:string) : (DotNet.Options-> DotNet.Options)=
+    fun (dotNetOptions:DotNet.Options) -> { dotNetOptions with WorkingDirectory = projectDirectory}
 
-  // !!("test/**/*.Tests.dll")
-  // |> XUnit2.run setXUnitParams
+  !!("test/**/*.Tests.csproj")
+  |> Seq.toArray
+  |> Array.Parallel.map Path.GetDirectoryName
+  |> Array.Parallel.map (fun projectDirectory -> DotNet.exec (setDotNetOptions projectDirectory) "xunit" "")
+  |> ignore
 )
 
 Target.create "Publish" (fun _ ->
