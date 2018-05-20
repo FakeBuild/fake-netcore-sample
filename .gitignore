@@ -1,6 +1,3 @@
-# Not sure about that one yet
-build.fsx.lock
-
 # Fake and Other stuff required to run the build
 # Fake stuff
 .fake
