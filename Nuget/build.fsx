@@ -18,7 +18,7 @@ Target.create "Clean" (fun _ ->
   Trace.log " --- Cleaning stuff --- "
 
   DotNet.exec id "clean" ""
-  |> printfn "===============================================================\n%A\n"
+  |> ignore
 )
 
 Target.create "Build" (fun _ ->
@@ -43,7 +43,7 @@ Target.create "Test" (fun _ ->
   |> Seq.toArray
   |> Array.Parallel.map Path.GetDirectoryName
   |> Array.Parallel.map (fun projectDirectory -> DotNet.exec (setDotNetOptions projectDirectory) "xunit" "")
-  |> Array.Parallel.iter (fun cliResults -> printfn "===============================================================\n%A\n" cliResults)
+  |> ignore
 )
 
 Target.create "Pack" (fun _ ->
