@@ -9,25 +9,22 @@ nuget Fake.DotNet.Cli prerelease
 
 open System.IO
 open Fake.Core
-open Fake.IO.Globbing.Operators
+open Fake.Core.TargetOperators
 open Fake.DotNet
+open Fake.IO.Globbing.Operators
 
 // *** Define Targets ***
 Target.create "Clean" (fun _ ->
   Trace.log " --- Cleaning stuff --- "
 
-  let setDotNetOptions defaultDtNetOptions : DotNet.Options =
-    defaultDtNetOptions
-
-  DotNet.exec setDotNetOptions "clean" ""
-  |> printfn "===============================================================\n%A\n"
+  DotNet.exec id "clean" ""
+  |> ignore
 )
 
 Target.create "Build" (fun _ ->
   Trace.log " --- Building the app --- "
 
-  let setBuildParams defaultBuildParamas = defaultBuildParamas
-  DotNet.build setBuildParams ""
+  DotNet.build id ""
 )
 
 Target.create "Test" (fun _ ->
@@ -40,20 +37,20 @@ Target.create "Test" (fun _ ->
   |> Seq.toArray
   |> Array.Parallel.map Path.GetDirectoryName
   |> Array.Parallel.map (fun projectDirectory -> DotNet.exec (setDotNetOptions projectDirectory) "xunit" "")
-  |> Array.Parallel.iter (fun cliResults -> printfn "===============================================================\n%A\n" cliResults)
+  |> ignore
+  // |> Array.Parallel.partition ()
 )
 
 Target.create "Publish" (fun _ ->
   Trace.log " --- Publishing app --- "
-  let setPublishParams defaultPublishParams = defaultPublishParams
-  DotNet.publish setPublishParams ""
+  
+  DotNet.publish id ""
 )
 
 Target.create "Deploy" (fun _ ->
   Trace.log " --- Deploying app --- "
 )
 
-open Fake.Core.TargetOperators
 
 // *** Define Dependencies ***
 "Clean"
