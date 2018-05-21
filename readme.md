@@ -45,6 +45,7 @@ This folder contains a really simple scenario :
   ```
 
 # To be done / Nothing works yet, just trying to create basic use cases
+_*The following are just guidelines*_
 
 ## Nuget
 Intended to show the use of a solution containing multiple nugets to produce :
@@ -53,5 +54,27 @@ Intended to show the use of a solution containing multiple nugets to produce :
 * `dotnet nuget push` (Not sure were to push for now and where to get credential)
 
 ## Mvc
+* `dotnet build`
+* `dotnet test`
+* `dotnet publish`
+* Deploy to (local ?) iis
+
+
 ## Front
+### Simple app
+Using Fake with Npm stuff (to prepare a more complex scenario)
+* Npm install
+* Npm build
+* Npm test
+* maybe some vscode/webpack integration for debug
+
+### Publishing an npm package ?
+
 ## Complex : mixing everything together
+* Web Api (hosted in IIS / Azure)
+* Front App
+* Console to run a backend (the idea is to get multiple package out of it)
+* Test
+* Sonar
+* Deploy front to a CDN ?
+* Deploy back to Azure ?
