@@ -3,7 +3,6 @@ nuget FSharp.Core prerelease
 nuget Fake.Core.Target prerelease
 nuget Fake.IO.FileSystem prerelease
 nuget Fake.DotNet.Cli prerelease
-nuget Fake.DotNet.Testing.Xunit2 prerelease
 "
 
 #load "./.fake/build.fsx/intellisense.fsx"
@@ -57,6 +56,9 @@ Target.createFinal "Done" (fun _ ->
   Trace.log " --- Fake script is done --- "
 )
 
+//*********************************************************/
+//                   TARGETS ORDERING
+//*********************************************************/
 open Fake.Core.TargetOperators
 
 // *** Define Dependencies ***

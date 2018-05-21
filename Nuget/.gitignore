@@ -3,10 +3,10 @@
 .fake
 BuildPackages
 
-
 # Visual Studio stuff
 .vs
 
 # .Net build stuff
 bin
 obj
+*.nupkg

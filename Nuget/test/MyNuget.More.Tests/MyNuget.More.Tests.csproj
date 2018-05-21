@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MyNuget.SomeExtensions\MyNuget.SomeExtensions.csproj" />
+    <ProjectReference Include="..\..\src\MyNuget.More\MyNuget.More.csproj" />
   </ItemGroup>
 
 </Project>
