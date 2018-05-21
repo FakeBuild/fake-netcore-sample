@@ -1,4 +1,6 @@
 #r "paket: 
+nuget System.Reactive.Linq
+nuget System.Reactive.Core
 nuget FSharp.Core prerelease
 nuget Fake.Core.Target prerelease
 nuget Fake.IO.FileSystem prerelease

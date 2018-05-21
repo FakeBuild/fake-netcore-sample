@@ -3,15 +3,13 @@
 SET BUILD_PACKAGES=BuildPackages
 SET FAKE_CLI="%BUILD_PACKAGES%/fake.exe"
 
-IF NOT EXIST %FAKE_CLI% (
-  dotnet tool install fake-cli ^
-    --tool-path ./%BUILD_PACKAGES% ^
-    --source-feed https://www.myget.org/F/fake-vsts/api/v3/index.json ^
-    --version 5.0.0-rc*
-)
+REM IF EXIST %FAKE_CLI% (
+REM   ECHO "Deleting '%BUILD_PACKAGES%' folder"
+REM   RMDIR /Q /S "%BUILD_PACKAGES%"
+REM )
 
-REM comments following lines once you are done with your script, the idea is to be sure paket install regenerate the lock file if we add new nuget in the fsx
-IF EXIST ".fake"          (RMDIR /Q /S ".fake"         )
-IF EXIST "build.fsx.lock" (DEL         "build.fsx.lock")
+IF NOT EXIST %FAKE_CLI% (
+  CALL updateFakeCli.cmd
+)
 
 %FAKE_CLI% run build.fsx --target "Done"

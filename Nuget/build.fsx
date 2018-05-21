@@ -1,4 +1,6 @@
 #r "paket: 
+nuget System.Reactive.Linq
+nuget System.Reactive.Core
 nuget FSharp.Core prerelease
 nuget Fake.Core.Target prerelease
 nuget Fake.IO.FileSystem prerelease
@@ -12,22 +14,20 @@ open Fake.Core
 open Fake.IO.Globbing.Operators
 open Fake.DotNet
 
+//*********************************************************/
+// *** Target implementations
+//*********************************************************/
 
-// *** Define Targets ***
-Target.create "Clean" (fun _ ->
+let targetClean _ =
   Trace.log " --- Cleaning stuff --- "
-
   DotNet.exec id "clean" ""
   |> ignore
-)
 
-Target.create "Build" (fun _ ->
+let targetBuild _ =
   Trace.log " --- Building the solution --- "
-
   DotNet.build id ""
-)
 
-Target.create "Test" (fun _ ->
+let targetTest _ =
   Trace.log " --- Testing projects in parallal --- "
 
   let setDotNetOptions (projectDirectory:string) : (DotNet.Options-> DotNet.Options)=
@@ -38,31 +38,33 @@ Target.create "Test" (fun _ ->
   |> Seq.toArray
   |> Array.Parallel.map Path.GetDirectoryName
   |> Array.Parallel.map (fun projectDirectory -> DotNet.exec (setDotNetOptions projectDirectory) "xunit" "")
-  |> ignore
-)
+  |> ignore 
 
-Target.create "SourceLink" (fun _ ->
-  Trace.log " --- Running SourceLink --- "
-
-  // DotNet.build id ""
-)
-
-Target.create "Pack" (fun _ ->
+let targetPack _ =
   Trace.log " --- Packaging nugets app --- "
-
   DotNet.pack id "" //--output FOLDERHERE"
-)
 
-Target.create "Push" (fun _ ->
+let targetPush _ =
   Trace.log " --- Deploying app --- "
-  
-  // DotNet.exec id "nuget" "push [some other args here]"
-  // |> ignore
-)
 
-Target.createFinal "Done" (fun _ ->
-  Trace.log " --- Fake script is done --- "
-)
+  let nugetPushArgs = 
+    let source = Environment.environVarOrFail "NUGET_FEED_TO_PUSH"
+    let apiKey = Environment.environVarOrFail "SOURCE_NUGET_API_KEY"
+
+    sprintf "nuget push -s %s -k %s" source apiKey
+
+  DotNet.exec id nugetPushArgs
+  |> ignore
+
+//*********************************************************/
+// *** Define Targets ***
+//*********************************************************/
+Target.create "Clean" targetClean
+Target.create "Build" targetBuild
+Target.create "Test" targetTest
+Target.create "Pack" targetPack
+Target.create "Push" targetPush
+Target.createFinal "Done" (fun _ -> Trace.log " --- Fake script is done --- ")
 
 //*********************************************************/
 //                   TARGETS ORDERING
@@ -75,8 +77,8 @@ open Fake.Core.TargetOperators
   ==> "Test"
   ==> "SourceLink"
   ==> "Pack"
-  ==> "Push"
+  =?> ("Push", BuildServer.isLocalBuild)
   ==> "Done"
 
 // *** Start Build ***
-Target.runOrDefault "Push"
+Target.runOrDefault "Done"
