@@ -1,8 +1,9 @@
 @ECHO OFF
 
 SET BUILD_PACKAGES=BuildPackages
+SET FAKE_CLI="%BUILD_PACKAGES%/fake.exe"
 
-IF NOT EXIST "%BUILD_PACKAGES%\fake.exe" (
+IF NOT EXIST %FAKE_CLI% (
   dotnet tool install fake-cli ^
     --tool-path ./%BUILD_PACKAGES% ^
     --source-feed https://www.myget.org/F/fake-vsts/api/v3/index.json ^
@@ -13,4 +14,4 @@ REM comments following lines once you are done with your script, the idea is to 
 REM IF EXIST ".fake"          (RMDIR /Q /S ".fake"         )
 REM IF EXIST "build.fsx.lock" (DEL         "build.fsx.lock")
 
-"%BUILD_PACKAGES%/fake.exe" run build.fsx --target Deploy
+%FAKE_CLI% run build.fsx --target "Done"
