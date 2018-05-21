@@ -1,10 +1,57 @@
+FakeBuild samples for DotNet
+=
+
+This repository contains multiple dotnet samples using Fake CLI as a build system  
+`fake-cli` is not used as a `global` install on purpose. It uses a `cmd` to install it in a `BuildPackages` folder so that the build would fetch everything it depends on  
+The idea is that a build system should not required pre-installed artifacts to run
+
+A wildcard resolution is used/needed for `--version` until Fake 5 release, once release the version could be deleted
+```cmd
+SET BUILD_PACKAGES=BuildPackages
+SET FAKE_CLI="%BUILD_PACKAGES%/fake.exe"    
+
+IF NOT EXIST %FAKE_CLI% (
+  dotnet tool install fake-cli ^
+    --tool-path ./%BUILD_PACKAGES% ^
+    --source-feed https://www.myget.org/F/fake-vsts/api/v3/index.json ^
+    --version 5.0.0-rc*
+)
+```
+
 # Work in progress
-# Nothing works yet, just trying to create basic use cases
+## Console
+This folder contains a really simple scenario :
+```cmd
+> dotnet new console
+> dotnet new xunit
+> dotnet new sln
+```
 
-This is a "mono repo" containing multiple use case possible to use `Fake-cli` using `dotnet`
+* `tasks.json` allow you to run `FakeBuild`
+* `launch.json` allow you to debug the `fsx` script
+* `clean` and `build` Target are using the `sln` based dotnet behavior
+* `test` look for every single `*.Tests.csproj` in the `test` folder and run `dotnet xunit` in every single of their parent folder. This step runs them all in parallel, to understand why just add few `xunit` project to the test folder and replace
+  ```fsharp
+  !!("test/**/*.Tests.csproj")
+  |> Seq.toArray
+  |> Array.Parallel.map ...
+  |> Array.Parallel.map (fun ...
+  ```
+  with
+  ```fsharp
+  !!("test/**/*.Tests.csproj")
+  |> Seq.map ...
+  |> Seq.map (fun ...
+  ```
 
-* Console
-* Nuget
-* Mvc
-* Front
-* Complex : mixing everything together
+# To be done / Nothing works yet, just trying to create basic use cases
+
+## Nuget
+Intended to show the use of a solution containing multiple nugets to produce :
+* `dotnet pack`
+* `sourcelink`
+* `dotnet nuget push` (Not sure were to push for now and where to get credential)
+
+## Mvc
+## Front
+## Complex : mixing everything together
