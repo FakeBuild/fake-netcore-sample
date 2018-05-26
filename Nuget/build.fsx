@@ -75,7 +75,6 @@ open Fake.Core.TargetOperators
 "Clean"
   ==> "Build"
   ==> "Test"
-  ==> "SourceLink"
   ==> "Pack"
   =?> ("Push", BuildServer.isLocalBuild)
   ==> "Done"

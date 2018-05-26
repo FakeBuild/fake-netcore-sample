@@ -1,0 +1,14 @@
+<Project ToolsVersion="15.0">
+    <ItemGroup>
+        <Projects Include="..\**\*.csproj" />
+        <Watch Include="..\**\*.cs" />
+        <Watch Include="..\build.fsx" />
+        <Watch Include="..\build.cmd" />
+    </ItemGroup>
+
+    <Target Name="FakeBuild">
+        <Exec Command="build.cmd" WorkingDirectory=".." />
+    </Target>
+
+    <Import Project="$(MSBuildExtensionsPath)\Microsoft.Common.targets"/>
+</Project>
