@@ -10,10 +10,7 @@ IF EXIST %FAKE_CLI% (
 
 IF NOT EXIST %FAKE_CLI% (
   ECHO "Installing 'fake-cli' dotnet tool"
-  dotnet tool install fake-cli ^
-    --tool-path ./%BUILD_PACKAGES% ^
-    --source-feed https://www.myget.org/F/fake-vsts/api/v3/index.json ^
-    --version 5.0.0-rc*
+  dotnet tool install fake-cli --tool-path ./%BUILD_PACKAGES%
 )
 
 IF EXIST ".fake" (

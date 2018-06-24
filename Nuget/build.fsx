@@ -1,10 +1,8 @@
 #r "paket: 
-nuget System.Reactive.Linq
-nuget System.Reactive.Core
-nuget FSharp.Core prerelease
-nuget Fake.Core.Target prerelease
-nuget Fake.IO.FileSystem prerelease
-nuget Fake.DotNet.Cli prerelease
+nuget FSharp.Core
+nuget Fake.Core.Target
+nuget Fake.IO.FileSystem
+nuget Fake.DotNet.Cli
 "
 
 #load "./.fake/build.fsx/intellisense.fsx"
@@ -36,25 +34,34 @@ let targetTest _ =
   //Looks overkill for only one csproj but just add 2 or 3 csproj and this will scale a lot better
   !!("test/**/*.Tests.csproj")
   |> Seq.toArray
-  |> Array.Parallel.map Path.GetDirectoryName
-  |> Array.Parallel.map (fun projectDirectory -> DotNet.exec (setDotNetOptions projectDirectory) "xunit" "")
-  |> ignore 
+  |> Array.Parallel.iter (fun fullCsProjName -> 
+      let projectDirectory = Path.GetDirectoryName(fullCsProjName)
+      DotNet.exec (setDotNetOptions projectDirectory) "xunit" ""
+      |> ignore
+    )
 
 let targetPack _ =
   Trace.log " --- Packaging nugets app --- "
   DotNet.pack id "" //--output FOLDERHERE"
 
 let targetPush _ =
-  Trace.log " --- Deploying app --- "
+  Trace.log " --- Pushing nuget --- "
 
-  let nugetPushArgs = 
-    let source = Environment.environVarOrFail "NUGET_FEED_TO_PUSH"
-    let apiKey = Environment.environVarOrFail "SOURCE_NUGET_API_KEY"
+  let source = Environment.environVarOrDefault "NUGET_FEED_TO_PUSH" "NUGET_FEED_TO_PUSH"
+  let apiKey = Environment.environVarOrDefault "SOURCE_NUGET_API_KEY" "SOURCE_NUGET_API_KEY"
 
+  let getNugetPushArgs source apiKey= 
     sprintf "nuget push -s %s -k %s" source apiKey
 
-  DotNet.exec id nugetPushArgs
-  |> ignore
+  let nugetPushArgs = getNugetPushArgs source apiKey
+  printfn "Pushing nuget with : 'dotnet %s'" nugetPushArgs
+  let processResult = DotNet.exec id nugetPushArgs ""
+  if processResult.OK then
+    printfn "Nuget pushed to '%s'" source
+  else
+    failwithf "Could not push nuget, error messages :\n%A" processResult
+
+  
 
 //*********************************************************/
 // *** Define Targets ***

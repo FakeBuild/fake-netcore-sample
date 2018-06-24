@@ -3,10 +3,10 @@
 SET BUILD_PACKAGES=BuildPackages
 SET FAKE_CLI="%BUILD_PACKAGES%/fake.exe"
 
-REM IF EXIST %FAKE_CLI% (
-REM   ECHO "Deleting '%BUILD_PACKAGES%' folder"
-REM   RMDIR /Q /S "%BUILD_PACKAGES%"
-REM )
+IF EXIST %FAKE_CLI% (
+  ECHO "Deleting '%BUILD_PACKAGES%' folder"
+  RMDIR /Q /S "%BUILD_PACKAGES%"
+)
 
 IF NOT EXIST %FAKE_CLI% (
   CALL updateFakeCli.cmd

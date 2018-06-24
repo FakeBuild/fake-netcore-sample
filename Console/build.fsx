@@ -1,10 +1,8 @@
 #r "paket: 
-nuget System.Reactive.Linq
-nuget System.Reactive.Core
-nuget FSharp.Core prerelease
-nuget Fake.Core.Target prerelease
-nuget Fake.IO.FileSystem prerelease
-nuget Fake.DotNet.Cli prerelease
+nuget FSharp.Core
+nuget Fake.Core.Target
+nuget Fake.IO.FileSystem
+nuget Fake.DotNet.Cli
 "
 
 #load "./.fake/build.fsx/intellisense.fsx"
