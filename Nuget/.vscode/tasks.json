@@ -2,13 +2,22 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
-            "type": "shell",
+            "label": "fake build",
             "command": "build.cmd",
+            "type": "shell",
             "args": [
-                "Push"
+                "Done"
             ],
             "problemMatcher": []
-        }
+        },
+        {
+            "label": "dotnet build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+            ],
+            "problemMatcher": "$msCompile"
+        },
     ]
 }

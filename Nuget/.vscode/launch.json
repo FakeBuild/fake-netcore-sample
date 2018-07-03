@@ -10,7 +10,6 @@
             "request": "launch",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/.fake/fake.exe",
-            // "program": "C:/Workspace/Tools/fake-dotnetcore-win7-x64/fake.exe",
             "args": [
                 "run",
                 "--fsiargs",
