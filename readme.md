@@ -2,12 +2,12 @@ FakeBuild samples for DotNet
 =
 
 This repository contains multiple dotnet samples using Fake CLI as a build system  
-`fake-cli` is not used as a `global` install on purpose. It uses a `cmd` to install it in a `BuildPackages` folder so that the build would fetch everything it depends on  
+`fake-cli` is not used as a `global` install on purpose. It uses a `cmd` to install it in a `.fake` folder so that the build would fetch everything it depends on  
 The idea is that a build system should not required pre-installed artifacts to run
 
 A wildcard resolution is used/needed for `--version` until Fake 5 release, once release the version could be deleted
 ```cmd
-SET BUILD_PACKAGES=BuildPackages
+SET BUILD_PACKAGES=.fake
 SET FAKE_CLI="%BUILD_PACKAGES%/fake.exe"    
 
 IF NOT EXIST %FAKE_CLI% (

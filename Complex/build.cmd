@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET BUILD_PACKAGES=BuildPackages
+SET BUILD_PACKAGES=.fake
 
 IF NOT EXIST "%BUILD_PACKAGES%\fake.exe" (
   dotnet tool install fake-cli --tool-path ./%BUILD_PACKAGES%
