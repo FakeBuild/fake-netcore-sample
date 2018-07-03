@@ -7,6 +7,13 @@ nuget Fake.DotNet.Cli
 
 #load "./.fake/build.fsx/intellisense.fsx"
 
+//Temporary fix until this is resolved : https://github.com/mono/mono/issues/9315
+#if !FAKE
+#r "Facades/netstandard"
+#r "netstandard"
+#endif
+//Temporary fix until this is resolved : https://github.com/mono/mono/issues/9315
+
 open System.IO
 open Fake.Core
 open Fake.Core.TargetOperators
