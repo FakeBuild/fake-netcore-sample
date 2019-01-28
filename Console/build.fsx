@@ -34,7 +34,7 @@ Target.create "Build" (fun _ ->
 )
 
 Target.create "Test" (fun _ ->
-  Trace.log " --- Testing projects in parallal --- "
+  Trace.log " --- Testing projects in parallel --- "
 
   let setDotNetOptions (projectDirectory:string) : (DotNet.TestOptions-> DotNet.TestOptions) =
     fun (dotNetTestOptions:DotNet.TestOptions) -> 
