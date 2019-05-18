@@ -12,8 +12,6 @@ nuget Fake.Tools.GitVersion
 nuget GitVersion.CommandLine storage:packages
 nuget Microsoft.Extensions.Configuration.UserSecrets //"
 
-// need to tripe check if i can remove "nuget FSharp.Core < 4.6"
-
 #load "./.fake/build.fsx/intellisense.fsx"
 
 #if !FAKE

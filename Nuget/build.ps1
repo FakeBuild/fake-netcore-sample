@@ -54,7 +54,7 @@ function Install-DotNetTool([string]$ToolName, [string]$ToolNugetName = $null) {
 }
 
 function Remove-DotNetToolArtifacts([string]$ToolName) {
-    $ToolFolder = Get-DotNetToolPath -ToolName $FakeFileName
+    $ToolFolder = Get-DotNetToolPath -ToolName $ToolName
 
     if (Test-Path $ToolFolder -PathType Container) {
         Write-Host "Deleting '$($ToolFolder)' folder"
@@ -68,12 +68,7 @@ function Get-FakeCliRelativePath {
 }
 
 function Remove-FakeArtifacts([string]$BuildScript) {
-    $FakeToolFolder = Get-DotNetToolPath -ToolName $FakeFileName
-    
-    if (Test-Path $FakeToolFolder -PathType Container) {
-        Write-Host "Deleting '$($FakeToolFolder)' folder"
-        Remove-Item -Force -Recurse $FakeToolFolder
-    }
+    Remove-DotNetToolArtifacts -ToolName $FakeFileName
     
     $scriptLockFileName = "$($BuildScript).lock"
     if (Test-Path $scriptLockFileName -PathType Leaf) {
